@@ -50,6 +50,13 @@ class PLAPIResource(db.Model):
     }
 
 
+    def generate_curl(self):
+        curl = 'curl --data "'
+        curl += 'name' + '=' + self.name
+        curl += '&' + 'uri' + '=' + self.uri
+        return curl + '" http://localhost:5001/'
+
+
 class ProgrammingLanguageModel(db.Model):
     """
         A programming language, such as Python or C, and related

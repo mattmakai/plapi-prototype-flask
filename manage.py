@@ -17,6 +17,13 @@ manager.add_command("shell", Shell(make_context=make_shell_context))
 def syncdb():
     db.create_all()
 
+
+@manager.command
+def backupdb():
+    for r in PLAPIResource.query.all():
+        print r.generate_curl()
+
+
 @manager.command
 def runserver():
     app.run("0.0.0.0", port=5001, debug=True)
