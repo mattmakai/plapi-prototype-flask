@@ -6,7 +6,9 @@ from . import db
 
 parser = reqparse.RequestParser()
 parser.add_argument('name', type=str, help="Resource name.")
-parser.add_argument('uri', type=str, help="Full path URI for this resource.")
+parser.add_argument('uri', type=str,
+                    help="Full path URI for this resource.")
+
 
 class PLAPIResourcesList(Resource):
     @marshal_with(PLAPIResource.marshal_fields)

@@ -12,6 +12,12 @@ def load():
     db.session.add(pr)
     db.session.commit()
 
+    pd = PLAPIResource()
+    pd.name = 'Paradigms'
+    pd.uri = 'paradigms'
+    db.session.add(pd)
+    db.session.commit()
+
     pl = ProgrammingLanguageModel()
     pl.name = 'Python'
     pl.slug = 'python'
