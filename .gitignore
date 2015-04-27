@@ -9,3 +9,5 @@
 assets
 tmp/
 setenvs.sh
+deploy/ssh_keys/
+deploy/ssl_cert/
