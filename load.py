@@ -1,5 +1,6 @@
 from plapi import db
-from plapi.models import PLAPIResource, ProgrammingLanguageModel
+from plapi.models import ParadigmModel, PLAPIResource, \
+                         ProgrammingLanguageModel
 
 
 def load():
@@ -31,6 +32,13 @@ def load():
     pl2.homepage_url = 'https://developer.apple.com/swift/'
     db.session.add(pl2)
     db.session.commit()
+
+    prdgm1 = ParadigmModel()
+    prdgm1.name = 'Imperative'
+    prdgm1.slug = 'imperative'
+    db.session.add(prdgm1)
+    db.session.commit()
+
 
 if __name__ == '__main__':
     load()

@@ -34,6 +34,11 @@ class ParadigmModel(db.Model):
     name = db.Column(db.String(256))
     slug = db.Column(db.String(256), unique=True)
 
+    marshal_fields = {
+        'name': fields.String,
+        'uri': fields.Url('paradigm_ep', absolute=True),
+    }
+
 
 class PLAPIResource(db.Model):
     """

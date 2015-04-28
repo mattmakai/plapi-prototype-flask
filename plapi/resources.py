@@ -42,3 +42,18 @@ class ProgrammingLanguagesList(Resource):
     def get(self, **kwargs):
         return ProgrammingLanguageModel.query.all()
 
+
+class Paradigm(Resource):
+    @marshal_with(ParadigmModel.marshal_fields)
+    def get(self, slug):
+        paradigms = ParadigmModel.query.filter_by(slug=slug)
+        if paradigms.count() > 0:
+            return paradigms.first()
+        return abort(404)
+
+
+class ParadigmList(Resource):
+    @marshal_with(ParadigmModel.marshal_fields)
+    def get(self, **kwargs):
+        return ParadigmModel.query.all()
+
