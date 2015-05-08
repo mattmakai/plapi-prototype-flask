@@ -1,6 +1,6 @@
 from plapi import db
 from plapi.models import ParadigmModel, PLAPIResource, \
-                         ProgrammingLanguageModel
+                         ProgrammingLanguageModel, Library
 
 
 def load():
@@ -23,6 +23,7 @@ def load():
     pl.name = 'Python'
     pl.slug = 'python'
     pl.homepage_url = 'https://www.python.org/'
+    pl.is_visible = True
     db.session.add(pl)
     db.session.commit()
 
@@ -30,15 +31,25 @@ def load():
     pl2.name = 'Swift'
     pl2.slug = 'swift'
     pl2.homepage_url = 'https://developer.apple.com/swift/'
+    pl2.is_visible = True
     db.session.add(pl2)
     db.session.commit()
 
     prdgm1 = ParadigmModel()
     prdgm1.name = 'Imperative'
     prdgm1.slug = 'imperative'
+    prdgm1.is_visible = True
     db.session.add(prdgm1)
     db.session.commit()
 
+    lib = Library()
+    lib.name = 'Django'
+    lib.slug = 'django'
+    lib.is_visible = True
+    lib.homepage_url = 'https://www.djangoproject.com/'
+    lib.source_code_url = 'https://github.com/django/django'
+    db.session.add(prdgm1)
+    db.session.commit()
 
 if __name__ == '__main__':
     load()

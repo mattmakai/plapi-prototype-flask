@@ -18,29 +18,32 @@ class PLAPIResourcesList(Resource):
             r.uri = request.base_url + r.uri
         return prs
 
-    def post(self):
-        args = parser.parse_args()
-        prs = PLAPIResource()
-        prs.name = args['name']
-        prs.uri = args['uri']
-        db.session.add(prs)
-        db.session.commit()
-        return {}, 201
-
 
 class ProgrammingLanguage(Resource):
     @marshal_with(ProgrammingLanguageModel.marshal_fields)
     def get(self, slug):
-        languages = ProgrammingLanguageModel.query.filter_by(slug=slug)
+        languages = db.session(
+            ProgrammingLanguageModel).filter_by(slug=slug)
         if languages.count() > 0:
             return languages.first()
         return abort(404)
+
+    def post(self):
+        args = parser.parse_args()
+        pl = ProgrammingLanguage()
+        pl.name = args['name']
+        pl.slug = args['slug']
+        pl.homepage_url = args['homepage_url']
+        db.session.add(pl)
+        db.session.commit()
+        return {}, 201
 
 
 class ProgrammingLanguagesList(Resource):
     @marshal_with(ProgrammingLanguageModel.marshal_fields)
     def get(self, **kwargs):
-        return ProgrammingLanguageModel.query.all()
+        return db.session.query(
+            ProgrammingLanguageModel).filter_by(is_visible=True).all()
 
 
 class Paradigm(Resource):
@@ -55,5 +58,6 @@ class Paradigm(Resource):
 class ParadigmList(Resource):
     @marshal_with(ParadigmModel.marshal_fields)
     def get(self, **kwargs):
-        return ParadigmModel.query.all()
+        return db.session.query(
+            ParadigmModel).filter_by(is_visible=True).all()
 

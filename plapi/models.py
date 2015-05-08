@@ -9,19 +9,25 @@ class User(db.Model):
     """
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(256), unique=True)
 
 
-class Framework(db.Model):
+
+class Library(db.Model):
     """
-        A code library for a specific language that makes implementing
-        some goal easier. For example, Django makes creating Python
-        web applications easier.
-    """
+        A collection of code for a specific language that makes
+        implementing some goal easier. For example, Django is a library
+        that eases Python web application creation.
+        """
+    homepage_url = db.Column(db.String(2048))
     __tablename__ = 'frameworks'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256))
     slug = db.Column(db.String(256), unique=True)
     homepage_url = db.Column(db.String(2048))
+    source_code_url = db.Column(db.String(2048))
+    is_visible = db.Column(db.Boolean(), default=False,
+                           server_default="false", nullable=False)
     code_repository_url = db.Column(db.String(2048))
 
 
@@ -33,6 +39,8 @@ class ParadigmModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256))
     slug = db.Column(db.String(256), unique=True)
+    is_visible = db.Column(db.Boolean(), default=False,
+                           server_default="false", nullable=False)
 
     marshal_fields = {
         'name': fields.String,
@@ -72,10 +80,14 @@ class ProgrammingLanguageModel(db.Model):
     name = db.Column(db.String(256))
     slug = db.Column(db.String(256), unique=True)
     homepage_url = db.Column(db.String(2048))
+    is_visible = db.Column(db.Boolean(), default=False,
+                           server_default="false", nullable=False)
 
     marshal_fields = {
         'name': fields.String,
         'uri': fields.Url('pl_ep', absolute=True),
         'homepage_url': fields.String,
     }
+
+
 
