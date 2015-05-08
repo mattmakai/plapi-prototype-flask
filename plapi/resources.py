@@ -22,8 +22,8 @@ class PLAPIResourcesList(Resource):
 class ProgrammingLanguage(Resource):
     @marshal_with(ProgrammingLanguageModel.marshal_fields)
     def get(self, slug):
-        languages = db.session(
-            ProgrammingLanguageModel).filter_by(slug=slug)
+        languages = db.session.query(
+            ProgrammingLanguageModel).filter_by(slug=slug, is_visible=True)
         if languages.count() > 0:
             return languages.first()
         return abort(404)
