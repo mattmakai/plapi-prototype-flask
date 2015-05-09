@@ -30,6 +30,12 @@ class Library(db.Model):
                            server_default="false", nullable=False)
     code_repository_url = db.Column(db.String(2048))
 
+    marshal_fields = {
+        'name': fields.String,
+        'uri': fields.Url('lib_ep', absolute=True),
+        'homepage_url': fields.String,
+    }
+
 
 class ParadigmModel(db.Model):
     """
