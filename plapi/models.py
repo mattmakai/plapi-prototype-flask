@@ -34,6 +34,7 @@ class Library(db.Model):
         'name': fields.String,
         'uri': fields.Url('lib_ep', absolute=True),
         'homepage_url': fields.String,
+        'source_code_url': fields.String
     }
 
 
