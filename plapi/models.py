@@ -13,26 +13,28 @@ class User(db.Model):
 
 
 
-class Library(db.Model):
+class LibraryModel(db.Model):
     """
         A collection of code for a specific language that makes
         implementing some goal easier. For example, Django is a library
         that eases Python web application creation.
-        """
+    """
     homepage_url = db.Column(db.String(2048))
-    __tablename__ = 'frameworks'
+    __tablename__ = 'libraries'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256))
     slug = db.Column(db.String(256), unique=True)
     homepage_url = db.Column(db.String(2048))
     source_code_url = db.Column(db.String(2048))
+    language = db.Column(db.Integer,
+                         db.ForeignKey('programming_languages.id'))
     is_visible = db.Column(db.Boolean(), default=False,
                            server_default="false", nullable=False)
     code_repository_url = db.Column(db.String(2048))
 
     marshal_fields = {
         'name': fields.String,
-        'uri': fields.Url('lib_ep', absolute=True),
+        'uri': fields.Url('library_ep', absolute=True),
         'homepage_url': fields.String,
         'source_code_url': fields.String
     }
@@ -87,6 +89,8 @@ class ProgrammingLanguageModel(db.Model):
     name = db.Column(db.String(256))
     slug = db.Column(db.String(256), unique=True)
     homepage_url = db.Column(db.String(2048))
+    libraries = db.relationship('LibraryModel', backref='libraries',
+                                lazy='dynamic')
     is_visible = db.Column(db.Boolean(), default=False,
                            server_default="false", nullable=False)
 

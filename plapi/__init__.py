@@ -10,8 +10,10 @@ db = SQLAlchemy(app)
 api = Api(app)
 
 
-from .resources import PLAPIResourcesList, Paradigm, ParadigmList
-from .resources import ProgrammingLanguage, ProgrammingLanguagesList
+from .resources import (LibrariesList, PLAPIResourcesList, Paradigm,
+                        ParadigmList)
+from .resources import (Library, ProgrammingLanguage,
+                        ProgrammingLanguagesList)
 
 api.add_resource(PLAPIResourcesList, '/', endpoint='plapi_ep')
 api.add_resource(ProgrammingLanguage, '/programming-language/<string:slug>/',
@@ -19,3 +21,5 @@ api.add_resource(ProgrammingLanguage, '/programming-language/<string:slug>/',
 api.add_resource(ProgrammingLanguagesList, '/programming-languages/')
 api.add_resource(Paradigm, '/paradigm/<string:slug>/', endpoint='paradigm_ep')
 api.add_resource(ParadigmList, '/paradigms/')
+api.add_resource(Library, '/library/<string:slug>/', endpoint='library_ep')
+api.add_resource(LibrariesList, '/libraries/')

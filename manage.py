@@ -1,14 +1,15 @@
 import os
 
 from plapi import app, db
-from plapi.models import PLAPIResource, ProgrammingLanguageModel
+from plapi.models import PLAPIResource, ProgrammingLanguageModel, LibraryModel
 from flask.ext.script import Manager, Shell
 
 manager = Manager(app)
 
 def make_shell_context():
     return dict(app=app, db=db, PLAPIResource=PLAPIResource,
-                ProgrammingLanguageModel=ProgrammingLanguageModel)
+                ProgrammingLanguageModel=ProgrammingLanguageModel,
+                LibraryModel=LibraryModel)
 
 
 manager.add_command("shell", Shell(make_context=make_shell_context))

@@ -1,6 +1,6 @@
 from plapi import db
 from plapi.models import ParadigmModel, PLAPIResource, \
-                         ProgrammingLanguageModel, Library
+                         ProgrammingLanguageModel, LibraryModel
 
 
 def load():
@@ -17,6 +17,12 @@ def load():
     pd.name = 'Paradigms'
     pd.uri = 'paradigms'
     db.session.add(pd)
+    db.session.commit()
+
+    libr = PLAPIResource()
+    libr.name = 'Libraries'
+    libr.uri = 'libraries'
+    db.session.add(libr)
     db.session.commit()
 
     pl = ProgrammingLanguageModel()
@@ -42,13 +48,14 @@ def load():
     db.session.add(prdgm1)
     db.session.commit()
 
-    lib = Library()
+    lib = LibraryModel()
     lib.name = 'Django'
     lib.slug = 'django'
     lib.is_visible = True
+    lib.language = pl.id
     lib.homepage_url = 'https://www.djangoproject.com/'
     lib.source_code_url = 'https://github.com/django/django'
-    db.session.add(prdgm1)
+    db.session.add(lib)
     db.session.commit()
 
 if __name__ == '__main__':

@@ -1,7 +1,8 @@
 from flask import request
 from flask.ext.restful import Resource, marshal_with, abort, reqparse
 
-from .models import ParadigmModel, PLAPIResource, ProgrammingLanguageModel
+from .models import (LibraryModel, ParadigmModel, PLAPIResource,
+                     ProgrammingLanguageModel, )
 from . import db
 
 parser = reqparse.RequestParser()
@@ -60,4 +61,20 @@ class ParadigmList(Resource):
     def get(self, **kwargs):
         return db.session.query(
             ParadigmModel).filter_by(is_visible=True).all()
+
+
+class Library(Resource):
+    @marshal_with(LibraryModel.marshal_fields)
+    def get(self, slug):
+        libraries = db.session.query(LibraryModel).filter_by(slug=slug)
+        if libraries.count > 0:
+            return libraries.first()
+        return abort(404)
+
+
+class LibrariesList(Resource):
+    @marshal_with(LibraryModel.marshal_fields)
+    def get(self, **kwargs):
+        return db.session.query(
+            LibraryModel).filter_by(is_visible=True).all()
 
