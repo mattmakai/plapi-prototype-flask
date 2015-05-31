@@ -98,7 +98,6 @@ class ProgrammingLanguageModel(db.Model):
         'name': fields.String,
         'uri': fields.Url('pl_ep', absolute=True),
         'homepage_url': fields.String,
+        'libraries': fields.Url('libraries_ep', absolute=True),
     }
-
-
 

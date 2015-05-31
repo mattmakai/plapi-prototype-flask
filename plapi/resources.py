@@ -74,7 +74,8 @@ class Library(Resource):
 
 class LibrariesList(Resource):
     @marshal_with(LibraryModel.marshal_fields)
-    def get(self, **kwargs):
-        return db.session.query(
-            LibraryModel).filter_by(is_visible=True).all()
-
+    def get(self, slug, **kwargs):
+        programming_language_id = db.session.query(ProgrammingLanguageModel).\
+            filter_by(slug=slug).first().id
+        return db.session.query(LibraryModel).filter_by(is_visible=True,
+            language=programming_language_id).all()

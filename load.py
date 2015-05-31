@@ -19,12 +19,6 @@ def load():
     db.session.add(pd)
     db.session.commit()
 
-    libr = PLAPIResource()
-    libr.name = 'Libraries'
-    libr.uri = 'libraries'
-    db.session.add(libr)
-    db.session.commit()
-
     pl = ProgrammingLanguageModel()
     pl.name = 'Python'
     pl.slug = 'python'
