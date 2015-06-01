@@ -91,6 +91,8 @@ class ProgrammingLanguageModel(db.Model):
     homepage_url = db.Column(db.String(2048))
     libraries = db.relationship('LibraryModel', backref='libraries',
                                 lazy='dynamic')
+    tutorials = db.relationship('TutorialModel', backref='tutorials',
+                                lazy='dynamic')
     is_visible = db.Column(db.Boolean(), default=False,
                            server_default="false", nullable=False)
 
@@ -101,3 +103,24 @@ class ProgrammingLanguageModel(db.Model):
         'libraries': fields.Url('libraries_ep', absolute=True),
     }
 
+
+class TutorialModel(db.Model):
+    """
+        Represents an article or blog post with a tutorial for
+        a specific programming language.
+    """
+    __tablename__ = 'tutorials'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(256))
+    slug = db.Column(db.String(256), unique=True)
+    tutorial_url = db.Column(db.String(2048))
+    language = db.Column(db.Integer,
+                         db.ForeignKey('programming_languages.id'))
+    is_visible = db.Column(db.Boolean(), default=False,
+                           server_default="false", nullable=False)
+
+    marshal_fields = {
+        'name': fields.String,
+        'uri': fields.Url('tutorial_ep', absolute=True),
+        'tutorial_url': fields.String,
+    }
