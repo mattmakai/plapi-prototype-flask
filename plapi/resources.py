@@ -5,11 +5,6 @@ from .models import (LibraryModel, ParadigmModel, PLAPIResource,
                      ProgrammingLanguageModel, )
 from . import db
 
-parser = reqparse.RequestParser()
-parser.add_argument('name', type=str, help="Resource name.")
-parser.add_argument('uri', type=str,
-                    help="Full path URI for this resource.")
-
 
 class PLAPIResourcesList(Resource):
     @marshal_with(PLAPIResource.marshal_fields)
@@ -29,12 +24,21 @@ class ProgrammingLanguage(Resource):
             return languages.first()
         return abort(404)
 
-    def post(self):
+    def post(self, slug):
+        if db.session.query(ProgrammingLanguageModel).filter_by(
+           slug=slug).count() > 0:
+            return {'conflict': 'A programming language with this slug has '
+                                'already been submitted to PLAPI.'}, 409
+        parser = reqparse.RequestParser()
+        parser.add_argument('name', type=str,
+                            help="Programming language name.")
+        parser.add_argument('homepage_url', type=str,
+                            help="Homepage URL for the programming language.")
         args = parser.parse_args()
-        pl = ProgrammingLanguage()
+        pl = ProgrammingLanguageModel()
         pl.name = args['name']
-        pl.slug = args['slug']
         pl.homepage_url = args['homepage_url']
+        pl.slug = slug
         db.session.add(pl)
         db.session.commit()
         return {}, 201
