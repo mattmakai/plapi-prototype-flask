@@ -59,6 +59,21 @@ class Paradigm(Resource):
             return paradigms.first()
         return abort(404)
 
+    def post(self, slug):
+        if db.session.query(ParadigmModel).filter_by(slug=slug).count() > 0:
+            return {'conflict': 'A paradigm with this slug has already '
+                                'been submitted to PLAPI.'}, 409
+        parser = reqparse.RequestParser()
+        parser.add_argument('name', type=str,
+                            help="Programming paradigm name.")
+        args = parser.parse_args()
+        paradigm = ParadigmModel()
+        paradigm.name = args['name']
+        paradigm.slug = slug
+        db.session.add(paradigm)
+        db.session.commit()
+        return {}, 201
+
 
 class ParadigmList(Resource):
     @marshal_with(ParadigmModel.marshal_fields)
@@ -75,6 +90,24 @@ class Library(Resource):
             return libraries.first()
         return abort(404)
 
+    def post(self, slug):
+        if db.session.query(LibraryModel).filter_by(slug=slug).count() > 0:
+            return {'conflict': 'A library with this slug has already '
+                                'been submitted to PLAPI.'}, 409
+        parser = reqparse.RequestParser()
+        parser.add_argument('name', type=str,
+                            help="Library name.")
+        parser.add_argument('homepage_url', type=str,
+                            help="Homepage URL for the code library.")
+        args = parser.parse_args()
+        library = LibraryModel()
+        library.name = args['name']
+        library.slug = slug
+        library.homepage_url = args['homepage_url']
+        db.session.add(library)
+        db.session.commit()
+        return {}, 201
+
 
 class LibrariesList(Resource):
     @marshal_with(LibraryModel.marshal_fields)
@@ -83,3 +116,4 @@ class LibrariesList(Resource):
             filter_by(slug=slug).first().id
         return db.session.query(LibraryModel).filter_by(is_visible=True,
             language=programming_language_id).all()
+
