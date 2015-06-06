@@ -30,9 +30,9 @@ class ProgrammingLanguage(Resource):
             return {'conflict': 'A programming language with this slug has '
                                 'already been submitted to PLAPI.'}, 409
         parser = reqparse.RequestParser()
-        parser.add_argument('name', type=str,
+        parser.add_argument('name', type=str, required=True,
                             help="Programming language name.")
-        parser.add_argument('homepage_url', type=str,
+        parser.add_argument('homepage_url', type=str, required=True,
                             help="Homepage URL for the programming language.")
         args = parser.parse_args()
         pl = ProgrammingLanguageModel()
@@ -64,7 +64,7 @@ class Paradigm(Resource):
             return {'conflict': 'A paradigm with this slug has already '
                                 'been submitted to PLAPI.'}, 409
         parser = reqparse.RequestParser()
-        parser.add_argument('name', type=str,
+        parser.add_argument('name', type=str, required=True,
                             help="Programming paradigm name.")
         args = parser.parse_args()
         paradigm = ParadigmModel()
@@ -95,9 +95,9 @@ class Library(Resource):
             return {'conflict': 'A library with this slug has already '
                                 'been submitted to PLAPI.'}, 409
         parser = reqparse.RequestParser()
-        parser.add_argument('name', type=str,
+        parser.add_argument('name', type=str, required=True,
                             help="Library name.")
-        parser.add_argument('homepage_url', type=str,
+        parser.add_argument('homepage_url', type=str, required=True,
                             help="Homepage URL for the code library.")
         args = parser.parse_args()
         library = LibraryModel()
