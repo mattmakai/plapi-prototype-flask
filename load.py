@@ -57,6 +57,7 @@ def load():
     tut.slug = 'choose-your-own-adventure-presentations'
     tut.is_visible = True
     tut.language = pl.id
+    tut.tutorial_url = 'https://www.twilio.com/blog/2014/11/choose-your-own-adventure-presentations-with-reveal-js-python-and-websockets.html'
     db.session.add(tut)
     db.session.commit()
 

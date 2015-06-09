@@ -1,13 +1,20 @@
 from flask import request
+from flask.ext.restful import fields
 from flask.ext.restful import Resource, marshal_with, abort, reqparse
 
 from .models import (LibraryModel, ParadigmModel, PLAPIResource,
-                     ProgrammingLanguageModel, )
+                     ProgrammingLanguageModel, TutorialModel)
 from . import db
 
 
+
 class PLAPIResourcesList(Resource):
-    @marshal_with(PLAPIResource.marshal_fields)
+    plapi_fields = {
+        'name': fields.String,
+        'uri': fields.String,
+    }
+
+    @marshal_with(plapi_fields)
     def get(self):
         prs = PLAPIResource.query.all()
         for r in prs:
@@ -16,7 +23,15 @@ class PLAPIResourcesList(Resource):
 
 
 class ProgrammingLanguage(Resource):
-    @marshal_with(ProgrammingLanguageModel.marshal_fields)
+    programming_language_fields = {
+        'name': fields.String,
+        'uri': fields.Url('pl_ep', absolute=True),
+        'homepage_url': fields.String,
+        'libraries': fields.Url('libraries_ep', absolute=True),
+        'tutorials': fields.Url('tutorials_ep', absolute=True),
+    }
+
+    @marshal_with(programming_language_fields)
     def get(self, slug):
         languages = db.session.query(
             ProgrammingLanguageModel).filter_by(slug=slug, is_visible=True)
@@ -45,45 +60,21 @@ class ProgrammingLanguage(Resource):
 
 
 class ProgrammingLanguagesList(Resource):
-    @marshal_with(ProgrammingLanguageModel.marshal_fields)
+    @marshal_with(ProgrammingLanguage.programming_language_fields)
     def get(self, **kwargs):
         return db.session.query(
             ProgrammingLanguageModel).filter_by(is_visible=True).all()
 
 
-class Paradigm(Resource):
-    @marshal_with(ParadigmModel.marshal_fields)
-    def get(self, slug):
-        paradigms = ParadigmModel.query.filter_by(slug=slug)
-        if paradigms.count() > 0:
-            return paradigms.first()
-        return abort(404)
-
-    def post(self, slug):
-        if db.session.query(ParadigmModel).filter_by(slug=slug).count() > 0:
-            return {'conflict': 'A paradigm with this slug has already '
-                                'been submitted to PLAPI.'}, 409
-        parser = reqparse.RequestParser()
-        parser.add_argument('name', type=str, required=True,
-                            help="Programming paradigm name.")
-        args = parser.parse_args()
-        paradigm = ParadigmModel()
-        paradigm.name = args['name']
-        paradigm.slug = slug
-        db.session.add(paradigm)
-        db.session.commit()
-        return {}, 201
-
-
-class ParadigmList(Resource):
-    @marshal_with(ParadigmModel.marshal_fields)
-    def get(self, **kwargs):
-        return db.session.query(
-            ParadigmModel).filter_by(is_visible=True).all()
-
-
 class Library(Resource):
-    @marshal_with(LibraryModel.marshal_fields)
+    library_fields = {
+        'name': fields.String,
+        'uri': fields.Url('library_ep', absolute=True),
+        'homepage_url': fields.String,
+        'source_code_url': fields.String,
+    }
+
+    @marshal_with(library_fields)
     def get(self, slug):
         libraries = db.session.query(LibraryModel).filter_by(slug=slug)
         if libraries.count > 0:
@@ -110,10 +101,71 @@ class Library(Resource):
 
 
 class LibrariesList(Resource):
-    @marshal_with(LibraryModel.marshal_fields)
+    @marshal_with(Library.library_fields)
     def get(self, slug, **kwargs):
         programming_language_id = db.session.query(ProgrammingLanguageModel).\
             filter_by(slug=slug).first().id
         return db.session.query(LibraryModel).filter_by(is_visible=True,
             language=programming_language_id).all()
+
+
+class Paradigm(Resource):
+    paradigm_fields = {
+        'name': fields.String,
+        'uri': fields.Url('paradigm_ep', absolute=True),
+    }
+
+    @marshal_with(paradigm_fields)
+    def get(self, slug):
+        paradigms = ParadigmModel.query.filter_by(slug=slug)
+        if paradigms.count() > 0:
+            return paradigms.first()
+        return abort(404)
+
+    def post(self, slug):
+        if db.session.query(ParadigmModel).filter_by(slug=slug).count() > 0:
+            return {'conflict': 'A paradigm with this slug has already '
+                                'been submitted to PLAPI.'}, 409
+        parser = reqparse.RequestParser()
+        parser.add_argument('name', type=str, required=True,
+                            help="Programming paradigm name.")
+        args = parser.parse_args()
+        paradigm = ParadigmModel()
+        paradigm.name = args['name']
+        paradigm.slug = slug
+        db.session.add(paradigm)
+        db.session.commit()
+        return {}, 201
+
+
+class ParadigmList(Resource):
+    @marshal_with(Paradigm.paradigm_fields)
+    def get(self, **kwargs):
+        return db.session.query(
+            ParadigmModel).filter_by(is_visible=True).all()
+
+
+class Tutorial(Resource):
+    tutorial_fields = {
+        'name': fields.String,
+        'uri': fields.Url('tutorial_ep', absolute=True),
+        'tutorial_url': fields.String,
+        'language': fields.Url('pl_ep', absolute=True),
+    }
+
+    @marshal_with(tutorial_fields)
+    def get(self, slug):
+        tutorials = TutorialModel.query.filter_by(slug=slug)
+        if tutorials.count() > 0:
+            return tutorials.first()
+        return abort(404)
+
+    # todo: add new tutorials
+
+
+class TutorialsList(Resource):
+    @marshal_with(Tutorial.tutorial_fields)
+    def get(self, **kwargs):
+        return db.session.query(TutorialModel).filter_by(
+            is_visible=True).all()
 

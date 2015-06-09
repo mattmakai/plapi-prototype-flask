@@ -11,18 +11,21 @@ api = Api(app)
 
 
 from .resources import (LibrariesList, PLAPIResourcesList, Paradigm,
-                        ParadigmList)
-from .resources import (Library, ProgrammingLanguage,
-                        ProgrammingLanguagesList)
+                        ParadigmList, Library, ProgrammingLanguage,
+                        ProgrammingLanguagesList, Tutorial, TutorialsList)
 
 api.add_resource(PLAPIResourcesList, '/', endpoint='plapi_ep')
-api.add_resource(ProgrammingLanguage, '/programming-language/<string:slug>/',
-                 endpoint='pl_ep')
-api.add_resource(ProgrammingLanguagesList, '/programming-languages/',
-                 endpoint='programming_languages')
 api.add_resource(Paradigm, '/paradigm/<string:slug>/', endpoint='paradigm_ep')
 api.add_resource(ParadigmList, '/paradigms/', endpoint='paradigms')
 api.add_resource(Library, '/library/<string:slug>/', endpoint='library_ep')
 api.add_resource(LibrariesList,
     '/programming-language/<string:slug>/libraries/',
     endpoint='libraries_ep')
+api.add_resource(Tutorial, '/tutorial/<string:slug>/',
+                 endpoint='tutorial_ep')
+api.add_resource(TutorialsList, '/programming-language/'
+                 '<string:slug>/tutorials/', endpoint='tutorials_ep')
+api.add_resource(ProgrammingLanguage, '/programming-language/<string:slug>/',
+                 endpoint='pl_ep')
+api.add_resource(ProgrammingLanguagesList, '/programming-languages/',
+                 endpoint='programming_languages')

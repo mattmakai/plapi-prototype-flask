@@ -1,4 +1,4 @@
-from flask.ext.restful import fields
+from flask.ext.restful import fields, url_for
 from itsdangerous import JSONWebSignatureSerializer as Serializer
 from itsdangerous import BadSignature
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -63,13 +63,6 @@ class LibraryModel(db.Model):
                            server_default="false", nullable=False)
     code_repository_url = db.Column(db.String(2048))
 
-    marshal_fields = {
-        'name': fields.String,
-        'uri': fields.Url('library_ep', absolute=True),
-        'homepage_url': fields.String,
-        'source_code_url': fields.String
-    }
-
 
 class ParadigmModel(db.Model):
     """
@@ -82,11 +75,6 @@ class ParadigmModel(db.Model):
     is_visible = db.Column(db.Boolean(), default=False,
                            server_default="false", nullable=False)
 
-    marshal_fields = {
-        'name': fields.String,
-        'uri': fields.Url('paradigm_ep', absolute=True),
-    }
-
 
 class PLAPIResource(db.Model):
     """
@@ -96,12 +84,6 @@ class PLAPIResource(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256))
     uri = db.Column(db.String(2048))
-
-    marshal_fields = {
-        'name': fields.String,
-        'uri': fields.String,
-    }
-
 
     def generate_curl(self):
         curl = 'curl --data "'
@@ -120,20 +102,13 @@ class ProgrammingLanguageModel(db.Model):
     name = db.Column(db.String(256))
     slug = db.Column(db.String(256), unique=True)
     homepage_url = db.Column(db.String(2048))
+    logo_url = db.Column(db.String(2048), default="")
     libraries = db.relationship('LibraryModel', backref='libraries',
                                 lazy='dynamic')
     tutorials = db.relationship('TutorialModel', backref='tutorials',
                                 lazy='dynamic')
     is_visible = db.Column(db.Boolean(), default=False,
                            server_default="false", nullable=False)
-
-    marshal_fields = {
-        'name': fields.String,
-        'uri': fields.Url('pl_ep', absolute=True),
-        'homepage_url': fields.String,
-        'libraries': fields.Url('libraries_ep', absolute=True),
-        #'tutorials': fields.Url('tutorials_ep', absolute=True),
-    }
 
 
 class TutorialModel(db.Model):
@@ -150,11 +125,4 @@ class TutorialModel(db.Model):
                          db.ForeignKey('programming_languages.id'))
     is_visible = db.Column(db.Boolean(), default=False,
                            server_default="false", nullable=False)
-
-    marshal_fields = {
-        'name': fields.String,
-        'uri': fields.Url('tutorial_ep', absolute=True),
-        'tutorial_url': fields.String,
-        'language': fields.Url('pl_ep', absolute=True),
-    }
 
