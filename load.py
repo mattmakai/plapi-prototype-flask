@@ -1,6 +1,6 @@
 from plapi import db
-from plapi.models import ParadigmModel, PLAPIResource, \
-                         ProgrammingLanguageModel, LibraryModel
+from plapi.models import (ParadigmModel, PLAPIResource, TutorialModel,
+                         ProgrammingLanguageModel, LibraryModel, )
 
 
 def load():
@@ -51,6 +51,15 @@ def load():
     lib.source_code_url = 'https://github.com/django/django'
     db.session.add(lib)
     db.session.commit()
+
+    tut = TutorialModel()
+    tut.name = 'Choose Your Own Adventure Presentations'
+    tut.slug = 'choose-your-own-adventure-presentations'
+    tut.is_visible = True
+    tut.language = pl.id
+    db.session.add(tut)
+    db.session.commit()
+
 
 if __name__ == '__main__':
     load()

@@ -132,6 +132,7 @@ class ProgrammingLanguageModel(db.Model):
         'uri': fields.Url('pl_ep', absolute=True),
         'homepage_url': fields.String,
         'libraries': fields.Url('libraries_ep', absolute=True),
+        #'tutorials': fields.Url('tutorials_ep', absolute=True),
     }
 
 
@@ -154,4 +155,6 @@ class TutorialModel(db.Model):
         'name': fields.String,
         'uri': fields.Url('tutorial_ep', absolute=True),
         'tutorial_url': fields.String,
+        'language': fields.Url('pl_ep', absolute=True),
     }
+
