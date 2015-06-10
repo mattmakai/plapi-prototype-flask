@@ -63,6 +63,11 @@ class LibraryModel(db.Model):
                            server_default="false", nullable=False)
     code_repository_url = db.Column(db.String(2048))
 
+    @property
+    def language_slug(self):
+        return db.session.query(ProgrammingLanguageModel). \
+               filter_by(is_visible=True, id=self.language).first().slug
+
 
 class ParadigmModel(db.Model):
     """
@@ -125,4 +130,9 @@ class TutorialModel(db.Model):
                          db.ForeignKey('programming_languages.id'))
     is_visible = db.Column(db.Boolean(), default=False,
                            server_default="false", nullable=False)
+
+    @property
+    def language_slug(self):
+        return db.session.query(ProgrammingLanguageModel). \
+               filter_by(is_visible=True, id=self.language).first().slug
 

@@ -72,6 +72,8 @@ class Library(Resource):
         'uri': fields.Url('library_ep', absolute=True),
         'homepage_url': fields.String,
         'source_code_url': fields.String,
+        'language': fields.String(attribute=lambda x: request.url_root + \
+                      'programming-language/' + x.language_slug + '/')
     }
 
     @marshal_with(library_fields)
@@ -150,7 +152,8 @@ class Tutorial(Resource):
         'name': fields.String,
         'uri': fields.Url('tutorial_ep', absolute=True),
         'tutorial_url': fields.String,
-        'language': fields.Url('pl_ep', absolute=True),
+        'language': fields.String(attribute=lambda x: request.url_root + \
+                      'programming-language/' + x.language_slug + '/'),
     }
 
     @marshal_with(tutorial_fields)
