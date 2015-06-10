@@ -73,7 +73,7 @@ class Library(Resource):
         'homepage_url': fields.String,
         'source_code_url': fields.String,
         'language': fields.String(attribute=lambda x: request.url_root + \
-                      'programming-language/' + x.language_slug + '/')
+                                  'programming-language/' + x.language_slug),
     }
 
     @marshal_with(library_fields)
@@ -153,7 +153,7 @@ class Tutorial(Resource):
         'uri': fields.Url('tutorial_ep', absolute=True),
         'tutorial_url': fields.String,
         'language': fields.String(attribute=lambda x: request.url_root + \
-                      'programming-language/' + x.language_slug + '/'),
+                                 'programming-language/' + x.language_slug),
     }
 
     @marshal_with(tutorial_fields)

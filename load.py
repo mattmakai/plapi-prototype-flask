@@ -19,6 +19,15 @@ def load():
     db.session.add(pd)
     db.session.commit()
 
+    """
+    pt = PLAPIResource()
+    pt.name = 'Tutorials'
+    pt.uri = 'tutorials'
+    db.session.add(pt)
+    db.session.commit()
+    """
+
+
     pl = ProgrammingLanguageModel()
     pl.name = 'Python'
     pl.slug = 'python'
@@ -35,11 +44,26 @@ def load():
     db.session.add(pl2)
     db.session.commit()
 
+    pl3 = ProgrammingLanguageModel()
+    pl3.name = 'Ruby'
+    pl3.slug = 'ruby'
+    pl3.homepage_url = 'https://www.ruby-lang.org/'
+    pl3.is_visible = True
+    db.session.add(pl3)
+    db.session.commit()
+
     prdgm1 = ParadigmModel()
     prdgm1.name = 'Imperative'
     prdgm1.slug = 'imperative'
     prdgm1.is_visible = True
     db.session.add(prdgm1)
+    db.session.commit()
+
+    prdgm2 = ParadigmModel()
+    prdgm2.name = 'Functional'
+    prdgm2.slug = 'functional'
+    prdgm2.is_visible = True
+    db.session.add(prdgm2)
     db.session.commit()
 
     lib = LibraryModel()
@@ -52,6 +76,16 @@ def load():
     db.session.add(lib)
     db.session.commit()
 
+    lib2 = LibraryModel()
+    lib2.name = 'Flask'
+    lib2.slug = 'flask'
+    lib2.is_visible = True
+    lib2.language = pl.id
+    lib2.homepage_url = 'http://flask.pocoo.org/'
+    lib2.source_code_url = 'https://github.com/mitsuhiko/flask'
+    db.session.add(lib)
+    db.session.commit()
+
     tut = TutorialModel()
     tut.name = 'Choose Your Own Adventure Presentations'
     tut.slug = 'choose-your-own-adventure-presentations'
@@ -59,6 +93,15 @@ def load():
     tut.language = pl.id
     tut.tutorial_url = 'https://www.twilio.com/blog/2014/11/choose-your-own-adventure-presentations-with-reveal-js-python-and-websockets.html'
     db.session.add(tut)
+    db.session.commit()
+
+    tut2 = TutorialModel()
+    tut2.name = 'Full Stack Python'
+    tut2.slug = 'full-stack-python'
+    tut2.is_visible = True
+    tut2.language = pl.id
+    tut2.tutorial_url = 'http://www.fullstackpython.com/'
+    db.session.add(tut2)
     db.session.commit()
 
 
